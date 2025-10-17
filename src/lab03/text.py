@@ -1,7 +1,7 @@
 # Подключаем модуль для работы с регулярными выражениями
 import re
 
-def normalize(text, *, casefold=True, yo2e=True):
+def normalize(text, *, casefold=True, yo2e=True): #* вкл выкл функции
 
     # Сохраняем исходный текст в переменную result
     result = text
