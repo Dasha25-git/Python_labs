@@ -1,58 +1,44 @@
-import sys   
-sys.path.append('C:\git-home\Python_labs\src')               
-from pathlib import Path   
-from lab03.text import normalize, tokenize  
-from collections import Counter           
-from io_txt_csv import read_text, write_csv, ensure_parent_dir 
+from __future__ import annotations
+from pathlib import Path
+import sys
 
-def main():
-    input_path = Path("C:/git-home/Python_labs/data/lab04/input.txt")    
-    output_path = Path("C:/git-home/Python_labs/data/lab04/report.csv") 
-    encoding = "utf-8"                     
-    top_n = 5                             
+# Добавляем в sys.path путь к src, чтобы можно было импортировать lab04
+SRC_DIR = Path(__file__).resolve().parents[1]
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
-    # Проверяем, существует ли входной файл
-    if not input_path.exists():
-        print(f"Ошибка: файл {input_path} не найден!")  
-        sys.exit(1)                                     
+from lab04.io_txt_csv import read_text, write_csv
 
-    # Пробуем прочитать файл 
-    try:
-        text = read_text(input_path, encoding=encoding)  # читаем весь текст
-    except UnicodeDecodeError:
-        print("Ошибка кодировки! Попробуйте encoding='cp1251'")  
-        sys.exit(1)
+def main() -> None:
+    # Определяем путь к корню проекта и к папке с данными
+    project_root = SRC_DIR.parent
+    data_dir = project_root / "data" / "lab04"
 
-    # Проверяем, пустой ли файл
-    if not text.strip():          # если только пробелы или пусто
-        print("Файл пустой. Создаём пустой отчёт.")
-        ensure_parent_dir(output_path)  # создаём папки
-        write_csv([], output_path, header=("word", "count"))  # создаём пустой CSV
-        return  
+    #  Проверка функции read_text 
+    print("Тест 1. Чтение текста")
+    text = read_text(data_dir / "input.txt")        # читаем содержимое файла
+    print("Тип результата:", type(text))            # выводим тип результата
+    print("Длина текста:", len(text))               # длина считанного текста
+    print("Первые 100 символов текста:")            # покажем кусочек текста
+    print(text[:100])                               # выводим первые 100 символов
 
-    # Нормализация и токенизация текста 
-    tokens = tokenize(normalize(text))  # приводим к нижнему регистру и разбиваем на слова
+    # Проверка функции write_csv 
+    print("Тест 2. Запись CSV")
 
-    #  Подсчёт частот 
-    freq = Counter(tokens)  # получаем словарь: слово -> количество
+    # Пример данных для записи
+    rows = [("word", 3), ("test", 5), ("python", 2)]
 
-    # Сортировка слов: сначала по частоте, потом по слову 
-    sorted_items = sorted(freq.items(), key=lambda kv: (-kv[1], kv[0]))
+    # Заголовки CSV
+    header = ("word", "count")
 
-    # Сохраняем результат в CSV 
-    ensure_parent_dir(output_path)  # создаём папку, если нет
-    write_csv(sorted_items, output_path, header=("word", "count"))
+    # Путь, куда сохраним файл
+    output_path = data_dir / "check.csv"
 
-    # Выводим короткую сводку в консоль 
-    total = sum(freq.values())          # всего слов
-    unique = len(freq)                  # уникальных слов
-    top_words = sorted_items[:top_n]    # первые N слов
+    # Записываем CSV
+    write_csv(rows, output_path, header=header)
 
-    print(f"Всего слов: {total}")
-    print(f"Уникальных слов: {unique}")
-    print(f"Топ-{top_n}:")
-    for w, c in top_words:
-        print(f"  {w}: {c}")
-        
+    # Выводим сообщение об успешном создании
+    print(f"Файл {output_path} успешно создан!")
+
 if __name__ == "__main__":
     main()
