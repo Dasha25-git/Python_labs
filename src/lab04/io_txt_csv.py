@@ -44,6 +44,8 @@ def ensure_parent_dir(path: str | Path) -> None:
     parent.mkdir(parents=True, exist_ok=True)  # создаём, если нет
 
 if __name__ == "__main__":
+    result = read_text('test.txt')
+    print(result)
     # Мини-тест (создаёт io_txt_csv_demo.csv рядом)
     demo_csv = Path(__file__).resolve().with_name("io_txt_csv_demo.csv")
     write_csv([("hello", 2), ("world", 3)], demo_csv)
