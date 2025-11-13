@@ -180,8 +180,8 @@
 
 Модуль содержит две функции для конвертации данных между JSON и CSV:
 
-   json_to_csv(json_path, csv_path) — преобразует данные из JSON-файла в CSV.
-   csv_to_json(csv_path, json_path) — преобразует данные из CSV-файла в JSON.
+   - json_to_csv(json_path, csv_path) — преобразует данные из JSON-файла в CSV.
+   - csv_to_json(csv_path, json_path) — преобразует данные из CSV-файла в JSON.
 
 #### Функция json_to_csv
 
