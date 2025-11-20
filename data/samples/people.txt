@@ -1,0 +1,5 @@
+Alice любит программировать на Python.
+Bob тоже изучает Python и немного Java.
+Alice и Bob ходят на пары по программированию.
+Иногда Alice помогает Bob разбираться с кодом на Python.
+Python нравится и Alice, и Bob.
