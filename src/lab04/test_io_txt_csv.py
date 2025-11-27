@@ -9,20 +9,21 @@ if str(SRC_DIR) not in sys.path:
 
 from lab04.io_txt_csv import read_text, write_csv
 
+
 def main() -> None:
     # Определяем путь к корню проекта и к папке с данными
     project_root = SRC_DIR.parent
     data_dir = project_root / "data" / "lab04"
 
-    #  Проверка функции read_text 
+    #  Проверка функции read_text
     print("Тест 1. Чтение текста")
-    text = read_text(data_dir / "input.txt")        # читаем содержимое файла
-    print("Тип результата:", type(text))            # выводим тип результата
-    print("Длина текста:", len(text))               # длина считанного текста
-    print("Первые 100 символов текста:")            # покажем кусочек текста
-    print(text[:100])                               # выводим первые 100 символов
+    text = read_text(data_dir / "input.txt")  # читаем содержимое файла
+    print("Тип результата:", type(text))  # выводим тип результата
+    print("Длина текста:", len(text))  # длина считанного текста
+    print("Первые 100 символов текста:")  # покажем кусочек текста
+    print(text[:100])  # выводим первые 100 символов
 
-    # Проверка функции write_csv 
+    # Проверка функции write_csv
     print("Тест 2. Запись CSV")
 
     # Пример данных для записи
@@ -39,6 +40,7 @@ def main() -> None:
 
     # Выводим сообщение об успешном создании
     print(f"Файл {output_path} успешно создан!")
+
 
 if __name__ == "__main__":
     main()

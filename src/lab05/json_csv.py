@@ -1,6 +1,7 @@
-from pathlib import Path   
-import json                
-import csv                
+from pathlib import Path
+import json
+import csv
+
 
 def json_to_csv(json_path: str, csv_path: str) -> None:
 
@@ -10,9 +11,8 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
     if Path(csv_path).suffix.lower() != ".csv":
         raise ValueError(f"Неверный тип файла: {csv_path}")
 
-    
-    jpath = Path(json_path)   # путь к исходному JSON
-    cpath = Path(csv_path)    # путь к будущему CSV
+    jpath = Path(json_path)  # путь к исходному JSON
+    cpath = Path(csv_path)  # путь к будущему CSV
 
     # Проверяем, что входной файл существует
     if not jpath.exists():
@@ -20,36 +20,35 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
 
     # Читаем JSON как текст и убеждаемся, что он не пустой
     raw = jpath.read_text(encoding="utf-8")
-    if raw.strip() == "": # если после удаления пробелов = пустая строка
+    if raw.strip() == "":  # если после удаления пробелов = пустая строка
         raise ValueError("Пустой JSON файл")
 
-    
     try:
-        data = json.loads(raw)   # ожидаем список словарей
+        data = json.loads(raw)  # ожидаем список словарей
     except json.JSONDecodeError:
-        raise ValueError("Невалидный JSON")  
+        raise ValueError("Невалидный JSON")
 
-    
     if not isinstance(data, list):
         raise ValueError("Ожидается список словарей")
     if data and not isinstance(data[0], dict):
         raise ValueError("Каждый элемент должен быть словарём")
 
     # Собираем все имена полей (ключи) и сортируем их по алфавиту — это заголовок CSV файла
-    keys = set()                 # здесь будем накапливать все ключи
-    for item in data:            # проходим по каждому объекту из списка
+    keys = set()  # здесь будем накапливать все ключи
+    for item in data:  # проходим по каждому объекту из списка
         if not isinstance(item, dict):
             raise ValueError("Элемент списка не является словарём")
-        keys.update(item.keys()) # добавляем ключи текущего словаря
-    header = sorted(keys)        # итоговый заголовок — это отсортированные ключи
+        keys.update(item.keys())  # добавляем ключи текущего словаря
+    header = sorted(keys)  # итоговый заголовок — это отсортированные ключи
 
     # Пишем CSV: сначала заголовок, затем строки
     with cpath.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=header)  # записываем словари как строки CSV
-        w.writeheader()                           # первая строка — имена колонок
-        for row in data:                          # перебираем все объекты из JSON
+        w.writeheader()  # первая строка — имена колонок
+        for row in data:  # перебираем все объекты из JSON
             # если какого-то ключа нет в объекте, ставим пустую строку
             w.writerow({k: row.get(k, "") for k in header})
+
 
 def csv_to_json(csv_path: str, json_path: str) -> None:
 
@@ -59,7 +58,7 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
     if Path(json_path).suffix.lower() != ".json":
         raise ValueError(f"Неверный тип файла: {json_path}")
 
-    cpath = Path(csv_path)   # путь к исходному CSV
+    cpath = Path(csv_path)  # путь к исходному CSV
     jpath = Path(json_path)  # путь к будущему JSON
 
     # Проверяем, что CSV существует
@@ -89,10 +88,3 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
 
     with jpath.open("w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=2)
-
-
-
-
-
-
-

@@ -5,9 +5,9 @@ import re
 
 
 def main():
-    #создаем объем, который будет разбирать аргументы командной строки
+    # создаем объем, который будет разбирать аргументы командной строки
     parser = argparse.ArgumentParser(description="CLI-утилиты: cat и stats")
-    subparsers = parser.add_subparsers(dest="command") #подкоманды 
+    subparsers = parser.add_subparsers(dest="command")  # подкоманды
 
     # подкоманда cat
     cat_parser = subparsers.add_parser("cat", help="Вывести содержимое файла")
@@ -24,7 +24,7 @@ def main():
         help="Сколько слов показать (по умолчанию 5)",
     )
 
-    args = parser.parse_args() #смотрим, что пользователь написал в командной строке
+    args = parser.parse_args()  # смотрим, что пользователь написал в командной строке
 
     if args.command is None:
         parser.error("Нужно указать подкоманду: cat или stats")
@@ -34,9 +34,11 @@ def main():
         if not path.exists():
             raise FileNotFoundError(path)
 
-        text = path.read_text(encoding="utf-8") #читаем весь файл как одну строку 
+        text = path.read_text(encoding="utf-8")  # читаем весь файл как одну строку
 
-        for i, line in enumerate(text.splitlines(), start=1): #splitlines() - разбивает текст на список строк 
+        for i, line in enumerate(
+            text.splitlines(), start=1
+        ):  # splitlines() - разбивает текст на список строк
             if args.n:
                 print(f"{i}\t{line}")
             else:
